@@ -1,0 +1,16 @@
+%load drivers/general_io
+%malloc 0x100
+%global main
+
+%section prog
+main:
+  int 0x2
+  push al
+  int 0x4
+  pop al
+  inc al
+  cmp al,0x100
+  jne main
+  mov al,0x100
+  int 0x2
+  halt

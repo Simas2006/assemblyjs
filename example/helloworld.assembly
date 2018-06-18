@@ -1,0 +1,63 @@
+%load drivers/general_io
+%malloc 0x100
+%global main
+
+%section prog
+main:
+  call generateChar
+  call wait
+  call checkChar
+  call wait
+  jmp main
+  halt
+
+generateChar:
+  int 0x8
+  cmp al,0x34
+  jgt generateChar
+  cmp al,0x1a
+  jlt generateCharLower
+  cmp al,0x34
+  jlt generateCharUpper
+  mov al,0x20
+  int 0x1
+  ret
+generateCharLower:
+  add al,0x41
+  int 0x1
+  ret
+generateCharUpper:
+  add al,0x47
+  int 0x1
+  ret
+
+checkChar:
+  load bl,cl
+  cmp al,bl
+  jne checkCharBackspace
+  inc cl
+  load bl,cl
+  cmp bl,0x0
+  je checkCharExit
+  ret
+checkCharBackspace:
+  mov al,0x8
+  int 0x1
+  ret
+checkCharExit:
+  halt
+
+wait:
+  push al
+  mov al,0x0
+waitLoop:
+  cmp al,0xfff
+  inc al
+  jne waitLoop
+  pop al
+  ret
+
+%section ram
+Hello World\00
+
+%end

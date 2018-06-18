@@ -1,0 +1,36 @@
+%load drivers/general_io
+%malloc 0x101
+%global main
+
+%section prog
+main:
+  mov cl,0x0
+  mov ch,0x0
+  load bl,0x0
+mainLoop:
+  mov al,ch
+  mul al,bl
+  add al,cl
+  add al,0x1
+  load al,al
+  int 0x2
+  mov al,0x2588
+  int 0x1
+  int 0x1
+  inc cl
+  cmp cl,bl
+  jlt mainLoop
+  mov al,0xa
+  int 0x1
+  mov cl,0x0
+  inc ch
+  cmp ch,bl
+  jlt mainLoop
+  mov al,0x100
+  int 0x2
+  halt
+
+%section ram
+\04\0f\03\00\03\03\03\03\03\03\03\0f\0f\0f\03\03\03
+
+%end
