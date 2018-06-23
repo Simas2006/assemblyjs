@@ -25,7 +25,7 @@ function executeInstruction(text) {
   }
   var name = text.split(" ")[0];
   if ( name == "halt" || text == "%section ram" || text == "%end" ) process.exit(0);
-  if ( text[1] ) var operands = text.split(" ")[1].split(",");
+  if ( text[1] ) var operands = (text.split(" ")[1] || "").split(",");
   if ( ["str","push","call","ret","int"].indexOf(name) <= -1 && Object.keys(registers).indexOf(operands[0]) <= -1 && ! name.startsWith("j") ) throw new Error("Invalid register");
   if ( name == "mov" ) {
     if ( operands[1].startsWith("0x") ) {
